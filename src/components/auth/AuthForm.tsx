@@ -2,6 +2,8 @@ import * as React from 'react';
 
 import { useNavigate, useLocation, Link as RouterLink } from 'react-router-dom';
 import { useFirebase } from '../../hooks/useFirebase';
+import { useForm, Controller, SubmitHandler, Control } from 'react-hook-form';
+import { styled } from '@mui/system';
 
 import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
@@ -14,7 +16,67 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import LinearProgress from '@mui/material/LinearProgress';
 
-function Copyright({ title }: { title: string }) {
+const ErrorParagraph = styled(Typography)(({ theme }) => ({
+  color: theme.palette.error.dark,
+  marginTop: theme.spacing(3),
+  marginBottom: theme.spacing(2),
+  textAlign: 'center',
+}));
+
+const Content = styled(Box)(({ theme }) => ({
+  marginTop: theme.spacing(8),
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+}));
+
+const BtnOrSpinnerWrapper = styled(Box)(({ theme }) => ({
+  width: '100%',
+  marginTop: theme.spacing(3),
+  marginBottom: theme.spacing(2),
+}));
+
+const Form = styled(Box)(({ theme }) => ({
+  marginTop: theme.spacing(3),
+}));
+
+const IconWrapper = styled(Avatar)(({ theme }) => ({
+  margin: theme.spacing(1),
+  backgroundColor: theme.palette.secondary.main,
+}));
+
+interface IFormInputs {
+  email: string;
+  password: string;
+  firstName?: string;
+  lastName?: string;
+}
+
+interface IControlledInput {
+  name: 'email' | 'password' | 'firstName' | 'lastName';
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  control: Control<IFormInputs, any>;
+  label: string;
+  sm?: number;
+  type?: React.HTMLInputTypeAttribute;
+}
+
+const ControlledInput: React.FC<IControlledInput> = ({ name, control, label, sm, type }) => {
+  return (
+    <Grid item xs={12} sm={sm}>
+      <Controller
+        name={name}
+        control={control}
+        rules={{ required: true }}
+        render={({ field: { onChange, value } }) => (
+          <TextField onChange={onChange} value={value} label={label} fullWidth type={type} />
+        )}
+      />
+    </Grid>
+  );
+};
+
+const Copyright: React.FC<{ title: string }> = ({ title }) => {
   return (
     <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 5 }}>
       {'Copyright © '}
@@ -25,12 +87,20 @@ function Copyright({ title }: { title: string }) {
       {'.'}
     </Typography>
   );
-}
+};
 
 export const AuthForm: React.FC = () => {
   const { user, login, register, loading, error } = useFirebase();
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const { handleSubmit, control } = useForm<IFormInputs>({
+    defaultValues: {
+      email: '',
+      password: '',
+      firstName: '',
+      lastName: '',
+    },
+  });
 
   React.useEffect(() => {
     if (pathname === '/login') {
@@ -44,98 +114,36 @@ export const AuthForm: React.FC = () => {
     }
   }, []);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    const data = new FormData(event.currentTarget);
-
+  const onSubmit: SubmitHandler<IFormInputs> = ({ email, password, firstName, lastName }) => {
     if (pathname === '/login') {
-      const email = data.get('email') as string;
-      const password = data.get('password') as string;
-      if (email && password) {
-        login(email, password);
-      }
+      login(email, password);
     } else {
-      const email = data.get('email') as string;
-      const password = data.get('password') as string;
-      const displayName = `${data.get('firstName')} ${data.get('lastName')}` as string;
-
-      if (email && password && displayName) {
-        register(email, password, displayName);
-      }
+      register(email, password, `${firstName} ${lastName}`);
     }
   };
 
   return (
     <Container component="main" maxWidth="xs">
-      <Box
-        sx={{
-          marginTop: 8,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}>
-        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+      <Content>
+        <IconWrapper>
           <LockOutlinedIcon />
-        </Avatar>
+        </IconWrapper>
         <Typography component="h1" variant="h5">
           {pathname === '/login' ? 'Sign in' : 'Sign up'}
         </Typography>
-        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+        <Form component="form" onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={2}>
             {pathname !== '/login' && (
               <>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    autoComplete="given-name"
-                    name="firstName"
-                    required
-                    fullWidth
-                    id="firstName"
-                    label="First Name"
-                    autoFocus
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    required
-                    fullWidth
-                    id="lastName"
-                    label="Last Name"
-                    name="lastName"
-                    autoComplete="family-name"
-                  />
-                </Grid>
+                <ControlledInput name="firstName" control={control} label="First Name" sm={6} />
+                <ControlledInput name="lastName" control={control} label="Last Name" sm={6} />
               </>
             )}
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="new-password"
-              />
-            </Grid>
+            <ControlledInput name="email" control={control} label="Email Address" type="email" />
+            <ControlledInput name="password" control={control} label="Password" type="password" />
           </Grid>
-          {error?.message && (
-            <Typography color="danger" textAlign={'center'} sx={{ mt: 3, mb: 2 }}>
-              {error?.message}
-            </Typography>
-          )}
-          <Box sx={{ width: '100%', mt: 3, mb: 2 }}>
+          {error?.message && <ErrorParagraph>{error?.message}</ErrorParagraph>}
+          <BtnOrSpinnerWrapper>
             {loading ? (
               <LinearProgress />
             ) : (
@@ -143,11 +151,10 @@ export const AuthForm: React.FC = () => {
                 Sign Up
               </Button>
             )}
-          </Box>
+          </BtnOrSpinnerWrapper>
           <Grid container justifyContent="flex-end">
             <Grid item>
               <Link
-                href="#"
                 variant="body2"
                 component={RouterLink}
                 to={pathname === '/login' ? '/register' : '/login'}>
@@ -157,8 +164,8 @@ export const AuthForm: React.FC = () => {
               </Link>
             </Grid>
           </Grid>
-        </Box>
-      </Box>
+        </Form>
+      </Content>
       <Copyright title={'Greenmind'} />
     </Container>
   );
