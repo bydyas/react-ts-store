@@ -1,6 +1,13 @@
 import React, { createContext, useState, useCallback, useMemo, useEffect } from 'react';
-import { signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'firebase/auth';
+import {
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  signOut,
+  createUserWithEmailAndPassword,
+  updateProfile,
+} from 'firebase/auth';
 import { FirebaseError } from '@firebase/util';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { auth } from '../configs/firebase';
 import { User, AuthError, IFirebaseContext } from '../types';
 
@@ -10,10 +17,18 @@ type FirebaseProviderProps = {
 
 export const FirebaseContext = createContext<IFirebaseContext>({} as IFirebaseContext);
 
+const initError = { code: 0, message: '' };
+
 export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({ children }) => {
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<AuthError>({ code: 0, message: '' });
+  const [error, setError] = useState<AuthError>(initError);
   const [user, setUser] = useState<User | null>(null);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    setError(initError);
+  }, [location.pathname]);
 
   useEffect((): void => {
     onAuthStateChanged(auth, (authUser) => {
@@ -25,55 +40,57 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({ children }) 
     });
   }, []);
 
-  // const login = useCallback(async (email: string, password: string): Promise<void> => {
-  //   setLoading(true);
-  //   try {
-  //     await signInWithEmailAndPassword(auth, email, password);
-  //     setLoading(false);
-  //     setUser(getCurrentUser());
-  //   } catch (error: unknown) {
-  //     setLoading(false);
-  //     if (error instanceof FirebaseError) {
-  //       setError({ code: error.code, message: error.message });
-  //     }
-  //   }
-  // }, []);
-
-  const login = useCallback((email: string, password: string) => {
+  const login = useCallback(async (email: string, password: string): Promise<void> => {
     setLoading(true);
-
-    signInWithEmailAndPassword(auth, email, password)
-      .then(() => {
-        setLoading(false);
-        setUser(getCurrentUser());
-      })
-      .catch((error) => {
-        setLoading(false);
-        if (error instanceof FirebaseError) {
-          setError({ code: error.code, message: error.message });
-        }
-      });
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      setLoading(false);
+      setUser(getCurrentUser());
+      navigate('/profile');
+    } catch (error: unknown) {
+      setLoading(false);
+      if (error instanceof FirebaseError) {
+        setError({ code: error.code, message: error.message });
+      }
+    }
   }, []);
 
-  // const logout = useCallback(async (): Promise<void> => {
-  //   try {
-  //     await signOut(auth);
-  //     setUser(null);
-  //   } catch (error: unknown) {
-  //     if (error instanceof FirebaseError) {
-  //       setError({ code: error.code, message: error.message });
-  //     }
-  //   }
-  // }, []);
+  const register = useCallback(async (email: string, password: string, displayName: string) => {
+    setLoading(true);
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+      await updateUser(auth.currentUser, { displayName });
+      setLoading(false);
+      setUser(getCurrentUser());
+      navigate('/profile');
+    } catch (error: unknown) {
+      setLoading(false);
+      if (error instanceof FirebaseError) {
+        setError({ code: error.code, message: error.message });
+      }
+    }
+  }, []);
 
-  const logout = useCallback(() => {
-    signOut(auth)
-      .then(() => setUser(null))
-      .catch((error) => {
-        if (error instanceof FirebaseError) {
-          setError({ code: error.code, message: error.message });
-        }
-      });
+  const updateUser = async (currentUser: any, details: object) => {
+    try {
+      await updateProfile(currentUser, details);
+    } catch (error) {
+      if (error instanceof FirebaseError) {
+        setError({ code: error.code, message: error.message });
+      }
+    }
+  };
+
+  const logout = useCallback(async (): Promise<void> => {
+    try {
+      await signOut(auth);
+      setUser(null);
+      navigate('/login');
+    } catch (error: unknown) {
+      if (error instanceof FirebaseError) {
+        setError({ code: error.code, message: error.message });
+      }
+    }
   }, []);
 
   const getCurrentUser = (): User | null => {
@@ -97,6 +114,7 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({ children }) 
       error,
       login,
       logout,
+      register,
     }),
     [user, error, loading, login, logout],
   );
