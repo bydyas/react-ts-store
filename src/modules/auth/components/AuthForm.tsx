@@ -40,6 +40,11 @@ const BtnOrSpinnerWrapper = styled(Box)(({ theme }) => ({
   marginBottom: theme.spacing(2),
 }));
 
+const Btn = styled(Button)({
+  width: '100%',
+  color: '#FFFFFF',
+});
+
 const IconWrapper = styled(Avatar)(({ theme }) => ({
   margin: theme.spacing(1),
   backgroundColor: theme.palette.primary.main,
@@ -119,9 +124,9 @@ export const AuthForm: React.FC = () => {
               {loading ? (
                 <LinearProgress />
               ) : (
-                <Button type="submit" fullWidth variant="contained">
-                  Sign Up
-                </Button>
+                <Btn type="submit" variant="contained">
+                  {pathname === '/login' ? 'Sign In' : 'Sign Up'}
+                </Btn>
               )}
             </BtnOrSpinnerWrapper>
             <Grid container justifyContent="flex-end">
