@@ -5,11 +5,12 @@ import {
   signOut,
   createUserWithEmailAndPassword,
   updateProfile,
+  User,
 } from 'firebase/auth';
 import { FirebaseError } from '@firebase/util';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { auth } from '../configs/firebase';
-import { User, AuthError, IFirebaseContext } from '../types';
+import { auth } from '../../../configs/firebase';
+import { TUser, IFirebaseContext } from '../models';
 
 type FirebaseProviderProps = {
   children: React.ReactNode;
@@ -17,17 +18,15 @@ type FirebaseProviderProps = {
 
 export const FirebaseContext = createContext<IFirebaseContext>({} as IFirebaseContext);
 
-const initError = { code: 0, message: '' };
-
 export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({ children }) => {
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<AuthError>(initError);
-  const [user, setUser] = useState<User | null>(null);
+  const [error, setError] = useState<string>('');
+  const [user, setUser] = useState<TUser | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
-    setError(initError);
+    setError('');
   }, [location.pathname]);
 
   useEffect((): void => {
@@ -50,7 +49,8 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({ children }) 
     } catch (error: unknown) {
       setLoading(false);
       if (error instanceof FirebaseError) {
-        setError({ code: error.code, message: error.message });
+        console.log(error.code);
+        setError(error.code);
       }
     }
   }, []);
@@ -59,24 +59,24 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({ children }) 
     setLoading(true);
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      await updateUser(auth.currentUser, { displayName });
+      await updateUser({ displayName });
       setLoading(false);
       setUser(getCurrentUser());
       navigate('/profile');
     } catch (error: unknown) {
       setLoading(false);
       if (error instanceof FirebaseError) {
-        setError({ code: error.code, message: error.message });
+        setError(error.code);
       }
     }
   }, []);
 
-  const updateUser = async (currentUser: any, details: object) => {
+  const updateUser = async (details: object) => {
     try {
-      await updateProfile(currentUser, details);
+      await updateProfile(auth.currentUser as User, details);
     } catch (error) {
       if (error instanceof FirebaseError) {
-        setError({ code: error.code, message: error.message });
+        setError(error.code);
       }
     }
   };
@@ -88,12 +88,12 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({ children }) 
       navigate('/login');
     } catch (error: unknown) {
       if (error instanceof FirebaseError) {
-        setError({ code: error.code, message: error.message });
+        setError(error.code);
       }
     }
   }, []);
 
-  const getCurrentUser = (): User | null => {
+  const getCurrentUser = (): TUser | null => {
     const user = auth.currentUser;
     if (user !== null) {
       return {
@@ -102,7 +102,7 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({ children }) 
         email: user.email,
         photoURL: user.photoURL,
         emailVerified: user.emailVerified,
-      } as User;
+      } as TUser;
     }
     return null;
   };

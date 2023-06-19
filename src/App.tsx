@@ -1,10 +1,10 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
-import { FirebaseProvider } from './providers/FirebaseProvider.tsx';
+import { FirebaseProvider } from './modules/auth/providers/FirebaseProvider.tsx';
 import { theme } from './configs/theme.ts';
 import CssBaseline from '@mui/material/CssBaseline';
-import { AuthForm } from './components/auth/AuthForm.tsx';
-import { Profile } from './components/profile/Profile.tsx';
+import { AuthForm } from './modules/auth/components/AuthForm.tsx';
+import { Profile } from './modules/profile/components/Profile.tsx';
 
 function App(): JSX.Element {
   return (

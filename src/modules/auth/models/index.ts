@@ -1,19 +1,14 @@
-export type User = {
+export type TUser = {
   uid: string;
   displayName: string;
   email: string;
   photoURL: string;
 };
 
-export type AuthError = {
-  code: number | string;
-  message: string;
-};
-
 export interface IFirebaseContext {
-  user?: User | null;
+  user?: TUser | null;
   loading: boolean;
-  error?: AuthError;
+  error?: string;
   login: (email: string, password: string) => void;
   register: (email: string, password: string, displayNamename: string) => void;
   logout: () => void;

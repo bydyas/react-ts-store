@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { useFirebase } from '../../hooks/useFirebase';
+import { useFirebase } from '../../auth/hooks/useFirebase';
 
 export const Profile: React.FC = () => {
   const { user, logout } = useFirebase();
