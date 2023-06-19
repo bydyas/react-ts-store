@@ -3,11 +3,12 @@ import * as React from 'react';
 import { useNavigate, useLocation, Link as RouterLink } from 'react-router-dom';
 import { useFirebase } from '../hooks/useFirebase';
 import { useForm, SubmitHandler, FormProvider } from 'react-hook-form';
-import { object, string, TypeOf } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { styled } from '@mui/system';
 
 import FormInput from './FormInput';
+import Copyright from './Copyright';
+import { schema, FormInputs } from '../zod/schema';
 
 import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
@@ -43,37 +44,6 @@ const IconWrapper = styled(Avatar)(({ theme }) => ({
   margin: theme.spacing(1),
   backgroundColor: theme.palette.secondary.main,
 }));
-
-const Copyright: React.FC<{ title: string }> = ({ title }) => {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 5 }}>
-      {'Copyright © '}
-      <Link color="inherit" component={RouterLink} to="/">
-        {title}
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-};
-
-const schema = object({
-  firstName: string()
-    .nonempty('First name is required')
-    .max(25, 'First name must be less than 25 characters')
-    .optional(),
-  lastName: string()
-    .nonempty('Last name is required')
-    .max(25, 'Last name must be less than 25 characters')
-    .optional(),
-  email: string().nonempty('Email is required').email('Email is invalid'),
-  password: string()
-    .nonempty('Password is required')
-    .min(6, 'Password must be more than 8 characters')
-    .max(20, 'Password must be less than 32 characters'),
-});
-
-type FormInputs = TypeOf<typeof schema>;
 
 export const AuthForm: React.FC = () => {
   const { user, login, register, loading, error } = useFirebase();
