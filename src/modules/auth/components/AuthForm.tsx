@@ -16,7 +16,7 @@ import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import SpaOutlinedIcon from '@mui/icons-material/SpaOutlined';
 import Typography from '@mui/material/Typography';
 import LinearProgress from '@mui/material/LinearProgress';
 
@@ -28,7 +28,7 @@ const ErrorParagraph = styled(Typography)(({ theme }) => ({
 }));
 
 const Content = styled(Box)(({ theme }) => ({
-  marginTop: theme.spacing(8),
+  paddingTop: theme.spacing(8),
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
@@ -42,7 +42,7 @@ const BtnOrSpinnerWrapper = styled(Box)(({ theme }) => ({
 
 const IconWrapper = styled(Avatar)(({ theme }) => ({
   margin: theme.spacing(1),
-  backgroundColor: theme.palette.secondary.main,
+  backgroundColor: theme.palette.primary.main,
 }));
 
 export const AuthForm: React.FC = () => {
@@ -65,6 +65,8 @@ export const AuthForm: React.FC = () => {
       reset();
     }
   }, [isSubmitSuccessful, reset]);
+
+  React.useEffect(() => reset, [pathname]);
 
   React.useEffect(() => {
     if (pathname === '/login') {
@@ -90,7 +92,7 @@ export const AuthForm: React.FC = () => {
     <Container component="main" maxWidth="xs">
       <Content>
         <IconWrapper>
-          <LockOutlinedIcon />
+          <SpaOutlinedIcon />
         </IconWrapper>
         <Typography component="h1" variant="h5">
           {pathname === '/login' ? 'Sign in' : 'Sign up'}
