@@ -71,8 +71,6 @@ const AuthForm: React.FC = () => {
     }
   }, [isSubmitSuccessful, reset]);
 
-  React.useEffect(() => reset, [pathname]);
-
   React.useEffect(() => {
     if (pathname === '/login') {
       document.title = 'Greenmind | Login';

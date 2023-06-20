@@ -11,7 +11,6 @@ import AppNavigation from './AppNavigation.tsx';
 
 const Background = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.background.default,
-  height: '100vh',
   width: '100%',
 }));
 
