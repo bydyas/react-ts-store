@@ -11,6 +11,7 @@ import { FirebaseError } from '@firebase/util';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { auth } from '../../../configs/firebase';
 import { TUser, IFirebaseContext } from '../models';
+import { routes } from '../../app/models/index';
 
 type FirebaseProviderProps = {
   children: React.ReactNode;
@@ -45,7 +46,7 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({ children }) 
       await signInWithEmailAndPassword(auth, email, password);
       setLoading(false);
       setUser(getCurrentUser());
-      navigate('/profile');
+      navigate(routes.PROFILE);
     } catch (error: unknown) {
       setLoading(false);
       if (error instanceof FirebaseError) {
@@ -62,7 +63,7 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({ children }) 
       await updateUser({ displayName });
       setLoading(false);
       setUser(getCurrentUser());
-      navigate('/profile');
+      navigate(routes.PROFILE);
     } catch (error: unknown) {
       setLoading(false);
       if (error instanceof FirebaseError) {
@@ -85,7 +86,7 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({ children }) 
     try {
       await signOut(auth);
       setUser(null);
-      navigate('/login');
+      navigate(routes.LOGIN);
     } catch (error: unknown) {
       if (error instanceof FirebaseError) {
         setError(error.code);
