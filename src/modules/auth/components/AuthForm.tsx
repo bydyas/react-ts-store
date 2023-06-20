@@ -3,6 +3,7 @@ import * as React from 'react';
 import { useNavigate, useLocation, Link as RouterLink } from 'react-router-dom';
 import { useFirebase } from '../hooks/useFirebase';
 import { useForm, SubmitHandler, FormProvider } from 'react-hook-form';
+import { routes } from '../../app/models';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { styled } from '@mui/system';
 
@@ -72,21 +73,21 @@ const AuthForm: React.FC = () => {
   }, [isSubmitSuccessful, reset]);
 
   React.useEffect(() => {
-    if (pathname === '/login') {
-      document.title = 'Greenmind | Login';
+    if (pathname === routes.LOGIN) {
+      document.title = 'Greenmind | Sign in';
     } else {
       document.title = 'Greenmind | Sign up';
     }
 
     if (user?.uid) {
-      navigate('/');
+      navigate(routes.HOME);
     }
   }, []);
 
   React.useEffect(() => reset({}), [pathname]);
 
   const onSubmit: SubmitHandler<FormInputs> = ({ email, password, firstName, lastName }) => {
-    if (pathname === '/login') {
+    if (pathname === routes.LOGIN) {
       login(email, password);
     } else {
       register(email, password, `${firstName} ${lastName}`);
@@ -100,7 +101,7 @@ const AuthForm: React.FC = () => {
           <SpaOutlinedIcon />
         </IconWrapper>
         <Typography component="h1" variant="h5">
-          {pathname === '/login' ? 'Sign in' : 'Sign up'}
+          {pathname === routes.LOGIN ? 'Sign in' : 'Sign up'}
         </Typography>
         <FormProvider {...methods}>
           <Box
@@ -110,7 +111,7 @@ const AuthForm: React.FC = () => {
             onSubmit={handleSubmit(onSubmit)}
             sx={{ mt: 3 }}>
             <Grid container spacing={2}>
-              {pathname !== '/login' && (
+              {pathname !== routes.LOGIN && (
                 <>
                   <FormInput name="firstName" label="First Name" sm={6} />
                   <FormInput name="lastName" label="Last Name" sm={6} />
@@ -125,7 +126,7 @@ const AuthForm: React.FC = () => {
                 <LinearProgress />
               ) : (
                 <Btn type="submit" variant="contained">
-                  {pathname === '/login' ? 'Sign In' : 'Sign Up'}
+                  {pathname === routes.LOGIN ? 'Sign In' : 'Sign Up'}
                 </Btn>
               )}
             </BtnOrSpinnerWrapper>
@@ -134,8 +135,8 @@ const AuthForm: React.FC = () => {
                 <Link
                   variant="body2"
                   component={RouterLink}
-                  to={pathname === '/login' ? '/register' : '/login'}>
-                  {pathname === '/login'
+                  to={pathname === routes.LOGIN ? routes.REGISTER : routes.LOGIN}>
+                  {pathname === routes.LOGIN
                     ? "Don't have an account? Sign Up"
                     : 'Already have an account? Sign in'}
                 </Link>
