@@ -83,6 +83,8 @@ const AuthForm: React.FC = () => {
     }
   }, []);
 
+  React.useEffect(() => reset({}), [pathname]);
+
   const onSubmit: SubmitHandler<FormInputs> = ({ email, password, firstName, lastName }) => {
     if (pathname === '/login') {
       login(email, password);
