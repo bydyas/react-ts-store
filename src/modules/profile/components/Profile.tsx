@@ -3,7 +3,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { useFirebase } from '../../auth/hooks/useFirebase';
 
-export const Profile: React.FC = () => {
+const Profile: React.FC = () => {
   const { user, logout } = useFirebase();
 
   return (
@@ -17,3 +17,5 @@ export const Profile: React.FC = () => {
     </Box>
   );
 };
+
+export default Profile;

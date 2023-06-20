@@ -50,7 +50,7 @@ const IconWrapper = styled(Avatar)(({ theme }) => ({
   backgroundColor: theme.palette.primary.main,
 }));
 
-export const AuthForm: React.FC = () => {
+const AuthForm: React.FC = () => {
   const { user, login, register, loading, error } = useFirebase();
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -148,3 +148,5 @@ export const AuthForm: React.FC = () => {
     </Container>
   );
 };
+
+export default AuthForm;
