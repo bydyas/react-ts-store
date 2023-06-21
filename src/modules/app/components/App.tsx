@@ -1,5 +1,5 @@
 import { styled } from '@mui/system';
-import { BrowserRouter } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
 import { FirebaseProvider } from '../../auth/providers/FirebaseProvider.tsx';
 import theme from '../../../configs/theme.ts';
@@ -16,7 +16,7 @@ const Background = styled(Box)(({ theme }) => ({
 
 const App: React.FC = () => {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <ThemeProvider theme={theme}>
         <FirebaseProvider>
           <CssBaseline />
@@ -25,7 +25,7 @@ const App: React.FC = () => {
           </Background>
         </FirebaseProvider>
       </ThemeProvider>
-    </BrowserRouter>
+    </HashRouter>
   );
 };
 
