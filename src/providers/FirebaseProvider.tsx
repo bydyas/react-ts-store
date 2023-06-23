@@ -9,9 +9,9 @@ import {
 } from 'firebase/auth';
 import { FirebaseError } from '@firebase/util';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { auth } from '../../../configs/firebase';
+import { auth } from '../configs/firebase';
 import { TUser, IFirebaseContext } from '../models';
-import { routes } from '../../app/models/index';
+import { routes } from '../models';
 
 type FirebaseProviderProps = {
   children: React.ReactNode;

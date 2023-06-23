@@ -1,6 +1,6 @@
-import { object, string, TypeOf } from 'zod';
+import { object, string } from 'zod';
 
-export const schema = object({
+export const authSchema = object({
   firstName: string()
     .nonempty('First name is required')
     .max(15, 'First name must be less than 15 characters')
@@ -19,5 +19,3 @@ export const schema = object({
         'Password must contain at least 1 uppercase letter and 1 number, and no special characters',
     }),
 });
-
-export type FormInputs = TypeOf<typeof schema>;

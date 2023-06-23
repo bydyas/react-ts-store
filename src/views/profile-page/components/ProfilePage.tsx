@@ -1,9 +1,9 @@
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { useFirebase } from '../../auth/hooks/useFirebase';
+import { useFirebase } from '../../../hooks/useFirebase';
 
-const Profile: React.FC = () => {
+const ProfilePage: React.FC = () => {
   const { user, logout } = useFirebase();
 
   return (
@@ -18,4 +18,4 @@ const Profile: React.FC = () => {
   );
 };
 
-export default Profile;
+export default ProfilePage;

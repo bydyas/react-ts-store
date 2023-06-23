@@ -1,7 +1,7 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { useFirebase } from '../../auth/hooks/useFirebase';
-import { routes } from '../models';
+import { useFirebase } from '../../../hooks/useFirebase';
+import { routes } from '../../../models';
 
 type ProtectedProps = {
   children: React.ReactNode;
