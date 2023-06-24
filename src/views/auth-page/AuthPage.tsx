@@ -22,9 +22,14 @@ const Content = styled(Box)(({ theme }) => ({
 }));
 
 const IconWrapper = styled(Avatar)(({ theme }) => ({
-  margin: theme.spacing(1),
+  margin: theme.spacing(2),
   backgroundColor: theme.palette.primary.main,
 }));
+
+const FlexBox = styled(Box)({
+  display: 'flex',
+  alignItems: 'center',
+});
 
 const AuthPage: React.FC = () => {
   const { user, login, register, loading, error } = useFirebase();
@@ -68,9 +73,14 @@ const AuthPage: React.FC = () => {
   return (
     <Container component="main" maxWidth="xs">
       <Content>
-        <IconWrapper>
-          <SpaOutlinedIcon />
-        </IconWrapper>
+        <FlexBox>
+          <IconWrapper>
+            <SpaOutlinedIcon />
+          </IconWrapper>
+          <Typography component="h1" sx={{ fontSize: '1.25em' }}>
+            Greenmind
+          </Typography>
+        </FlexBox>
         <Typography component="h1" variant="h5">
           {pathname === routes.LOGIN ? 'Sign In' : 'Sign Up'}
         </Typography>
