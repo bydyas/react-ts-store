@@ -10,4 +10,7 @@ export const NavLink = styled(BaseNavLink)(({ theme }) => ({
   '&.active': {
     color: theme.palette.text.secondary,
   },
+  '&:hover': {
+    color: theme.palette.text.secondary,
+  },
 }));

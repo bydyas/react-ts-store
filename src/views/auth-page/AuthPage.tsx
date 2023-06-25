@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { styled } from '@mui/system';
 
 import { useFirebase } from '../../hooks/useFirebase';
@@ -77,8 +77,21 @@ const AuthPage: React.FC = () => {
           <IconWrapper>
             <SpaOutlinedIcon />
           </IconWrapper>
-          <Typography component="h1" sx={{ fontSize: '1.25em' }}>
-            Greenmind
+          <Typography
+            variant="h6"
+            noWrap
+            component={Link}
+            to={routes.HOME}
+            sx={{
+              mr: 2,
+              display: { xs: 'none', md: 'flex' },
+              fontFamily: 'monospace',
+              fontWeight: 700,
+              letterSpacing: '.3rem',
+              color: 'inherit',
+              textDecoration: 'none',
+            }}>
+            GREENMIND
           </Typography>
         </FlexBox>
         <Typography component="h1" variant="h5">

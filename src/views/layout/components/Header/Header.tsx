@@ -15,6 +15,7 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import SpaOutlinedIcon from '@mui/icons-material/SpaOutlined';
 
 const pages: Page[] = [
   { title: 'Home', path: routes.HOME },
@@ -29,6 +30,15 @@ const StyledAppBar = styled(AppBar)({
   backgroundColor: 'transparent',
 });
 
+const StyledSpaOutlinedIcon = styled(SpaOutlinedIcon)({
+  marginRight: '3px',
+});
+
+const StyledBtn = styled(Button)({
+  lineHeight: 1.5,
+  fontSize: '1rem',
+});
+
 const Header: React.FC = () => {
   const { user, logout } = useFirebase();
 
@@ -39,8 +49,8 @@ const Header: React.FC = () => {
           <Typography
             variant="h6"
             noWrap
-            component="a"
-            href="/"
+            component={Link}
+            to={routes.HOME}
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
@@ -50,7 +60,9 @@ const Header: React.FC = () => {
               color: 'inherit',
               textDecoration: 'none',
             }}>
-            GREENMIND
+            GREEN
+            <StyledSpaOutlinedIcon />
+            MIND
           </Typography>
 
           <BurgerMenu pages={pages} />
@@ -70,7 +82,7 @@ const Header: React.FC = () => {
               color: 'inherit',
               textDecoration: 'none',
             }}>
-            GREENMIND
+            GREEN <StyledSpaOutlinedIcon /> MIND
           </Typography>
           <Box component={'nav'} sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map(({ title, path }) => (
@@ -84,7 +96,7 @@ const Header: React.FC = () => {
             <Settings logout={logout} photoURL={user?.photoURL} />
           ) : (
             <Link to={routes.LOGIN} style={{ display: 'block' }}>
-              <Button variant="outlined">Sign In</Button>
+              <StyledBtn variant="outlined">Sign In</StyledBtn>
             </Link>
           )}
         </Toolbar>
