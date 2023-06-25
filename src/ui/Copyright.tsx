@@ -11,7 +11,7 @@ type CopyrightProps = {
 
 const Copyright: React.FC<CopyrightProps> = ({ title }) => {
   return (
-    <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 5 }}>
+    <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 5, mb: 5 }}>
       {'Copyright © '}
       <Link color="inherit" component={RouterLink} to="/">
         {title}

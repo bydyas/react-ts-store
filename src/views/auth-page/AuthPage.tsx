@@ -6,7 +6,7 @@ import { useFirebase } from '../../hooks/useFirebase';
 import { routes } from '../../models';
 import { FormInputs, FormProps } from '../../models';
 import AuthForm from './components/AuthForm';
-import Copyright from './components/Copyright';
+import Copyright from '../../ui/Copyright';
 
 import SpaOutlinedIcon from '@mui/icons-material/SpaOutlined';
 import Container from '@mui/material/Container';
