@@ -1,22 +1,19 @@
 import React from 'react';
-import { Route, Routes, Link } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { routes } from '../../models';
 import Protected from './components/Protected.tsx';
 import Loading from './components/Loading.tsx';
 import Layout from '../layout/Layout.tsx';
 
+import ProductsPage from '../products-page/ProductsPage.tsx';
+import CartPage from '../cart-page/CartPage.tsx';
+import ContactPage from '../contact-page/ContactPage.tsx';
+
 const AuthPage = React.lazy(() => import('../auth-page/AuthPage.tsx'));
 const ProfilePage = React.lazy(() => import('../profile-page/components/ProfilePage.tsx'));
 
 const TestHome: React.FC = () => {
-  return (
-    <>
-      <h1>Test Home</h1>
-      <Link to={routes.LOGIN}>Go to sign in</Link>
-      <br />
-      <Link to={routes.PROFILE}>Go to profile</Link>
-    </>
-  );
+  return <h2>Home</h2>;
 };
 
 const AppNavigation: React.FC = () => {
@@ -25,8 +22,9 @@ const AppNavigation: React.FC = () => {
       <Routes>
         <Route element={<Layout />}>
           <Route path={routes.HOME} element={<TestHome />} />
-          <Route path={routes.PRDOUCTS} element={<TestHome />} />
-          <Route path={routes.CONTACTS} element={<TestHome />} />
+          <Route path={routes.PRDOUCTS} element={<ProductsPage />} />
+          <Route path={routes.CONTACTS} element={<ContactPage />} />
+          <Route path={routes.CART} element={<CartPage />} />
           <Route
             path={routes.PROFILE}
             element={
