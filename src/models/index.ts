@@ -3,6 +3,9 @@ import { authSchema } from '../validation/authSchema';
 
 export enum routes {
   HOME = '/',
+  PRDOUCTS = '/products',
+  CONTACTS = '/contacts',
+  CART = '/cart',
   PROFILE = '/profile',
   LOGIN = '/sign-in',
   REGISTER = '/sign-up',
@@ -36,3 +39,8 @@ export type FormProps = {
 };
 
 export type FormInputs = TypeOf<typeof authSchema>;
+
+export type Page = {
+  title: string;
+  path: routes;
+};
