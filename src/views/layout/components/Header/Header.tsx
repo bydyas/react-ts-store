@@ -35,8 +35,8 @@ const StyledSpaOutlinedIcon = styled(SpaOutlinedIcon)({
 });
 
 const StyledBtn = styled(Button)({
-  lineHeight: 1.5,
-  fontSize: '1rem',
+  lineHeight: 1.6,
+  fontSize: '1.25rem',
 });
 
 const Header: React.FC = () => {
