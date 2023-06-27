@@ -93,7 +93,7 @@ const Header: React.FC = () => {
           </Box>
 
           {user ? (
-            <Settings logout={logout} photoURL={user?.photoURL} />
+            <Settings logout={logout} photoURL={user?.photoURL} displayName={user?.displayName} />
           ) : (
             <Link to={routes.LOGIN} style={{ display: 'block' }}>
               <StyledBtn variant="outlined">Sign In</StyledBtn>

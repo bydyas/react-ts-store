@@ -14,10 +14,15 @@ import { NavLink } from '../../../../../ui/NavLink';
 type SettingsProps = {
   logout: () => void;
   photoURL: string;
+  displayName: string;
 };
 
-const Settings: React.FC<SettingsProps> = ({ logout, photoURL }) => {
+const Settings: React.FC<SettingsProps> = ({ logout, photoURL, displayName }) => {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+
+  const firstName: string = displayName.split(' ')[0];
+  const lastName: string = displayName.split(' ')[1];
+  const initials = `${firstName[0]}${lastName[0]}`;
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
@@ -32,11 +37,15 @@ const Settings: React.FC<SettingsProps> = ({ logout, photoURL }) => {
     logout();
   };
 
+  console.log(initials);
+
   return (
     <Box sx={{ flexGrow: 0 }}>
       <Tooltip title="Open settings">
         <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-          <Avatar alt="Remy Sharp" src={photoURL} />
+          <Avatar src={null || photoURL} alt={photoURL || displayName}>
+            {photoURL || initials}
+          </Avatar>
         </IconButton>
       </Tooltip>
       <Menu
