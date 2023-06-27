@@ -11,7 +11,7 @@ const Protected: React.FC<ProtectedProps> = ({ children }) => {
   const { user } = useFirebase();
 
   if (!user) {
-    return <Navigate to={routes.LOGIN} replace />;
+    return <Navigate to={routes.HOME} replace />;
   }
 
   return children;
