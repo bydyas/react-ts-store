@@ -2,14 +2,15 @@ import React from 'react';
 
 import { routes } from '../../../../../models';
 
+import AvatarSection from '../../../../../ui/AvatarSection';
+import { NavLink } from '../../../../../ui/NavLink';
+
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import Box from '@mui/material/Box';
-import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import { NavLink } from '../../../../../ui/NavLink';
 
 type SettingsProps = {
   logout: () => void;
@@ -19,10 +20,6 @@ type SettingsProps = {
 
 const Settings: React.FC<SettingsProps> = ({ logout, photoURL, displayName }) => {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
-
-  const firstName: string = displayName.split(' ')[0];
-  const lastName: string = displayName.split(' ')[1];
-  const initials = `${firstName[0]}${lastName[0]}`;
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
@@ -37,15 +34,11 @@ const Settings: React.FC<SettingsProps> = ({ logout, photoURL, displayName }) =>
     logout();
   };
 
-  console.log(initials);
-
   return (
     <Box sx={{ flexGrow: 0 }}>
       <Tooltip title="Open settings">
         <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-          <Avatar src={null || photoURL} alt={photoURL || displayName}>
-            {photoURL || initials}
-          </Avatar>
+          <AvatarSection photoURL={photoURL} displayName={displayName} />
         </IconButton>
       </Tooltip>
       <Menu
